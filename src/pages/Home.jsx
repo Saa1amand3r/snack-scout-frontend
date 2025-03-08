@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import ResultList from "../components/ResultList";
 import {sendPrompt} from "../utils/requestsUtil";
+import useUserLocation from "../utils/location";
 
 export default function Home() {
     const [prompt, setPrompt] = useState("");
     const [results, setResults] = useState([])
+    const {location, error} = useUserLocation();
 
     const handleSubmit = async () => {
         console.log("User request:", prompt);
-        const res = await sendPrompt(prompt);
+        console.log(`Latitude: ${location.lat}, Longitude: ${location.lon}`);
+        const res = await sendPrompt(prompt, location.latitude, location.longitude);
         setResults(res)
     };
 
