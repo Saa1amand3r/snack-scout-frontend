@@ -1,7 +1,6 @@
 import React from "react";
-import ErrorCard from "./ErrorCard";
 
-const SearchBar = ({apiError, locationError, handleSubmit, clear, prompt, setPrompt}) => {
+const SearchBar = ({handleSubmit, clear, prompt, setPrompt}) => {
     return (
         <>
             <h1 className="text-2xl font-bold text-gray-900">Enter Your Request</h1>
@@ -12,8 +11,6 @@ const SearchBar = ({apiError, locationError, handleSubmit, clear, prompt, setPro
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
             />
-            {apiError && <ErrorCard error={apiError} />}
-            {locationError && <ErrorCard error={locationError} />}
 
             <div className="flex flex-row w-[100%] justify-between">
                 <button

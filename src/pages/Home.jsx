@@ -3,6 +3,7 @@ import SearchBar from "../components/SearchBar";
 import ResultList from "../components/ResultList";
 import { sendPrompt } from "../utils/requestsUtil";
 import useUserLocation from "../utils/location";
+import ErrorCard from "../components/ErrorCard";
 
 export default function Home() {
     const [prompt, setPrompt] = useState("");
@@ -17,17 +18,19 @@ export default function Home() {
         setLoading(true);
         setApiError(null);
 
+        if (!location || !location.lat || !location.lon) {
+            setApiError("We can't get access to your location")
+        }
+
         try {
             const res = await sendPrompt(prompt, location.lat, location.lon, setApiError);
             setResults(res);
             setLoading(false);
         } catch (e) {
-            setApiError("API error happened");
+            setApiError("Something went wrong, please try again later");
             setResults([])
             setLoading(false);
         }
-
-        console.log(apiError)
     };
 
     const clear = () => {
@@ -40,7 +43,8 @@ export default function Home() {
         <div className="flex items-center justify-center h-screen bg-gray-100 p-4">
             <div className="w-full max-w-2xl p-6 shadow-xl bg-white rounded-2xl">
                 <div className="flex flex-col items-center space-y-4">
-                    <SearchBar apiError={apiError} locationError={locationError} clear={clear} handleSubmit={handleSubmit} prompt={prompt} setPrompt={setPrompt} />
+                    {apiError && <ErrorCard message={apiError} /> }
+                    <SearchBar clear={clear} handleSubmit={handleSubmit} prompt={prompt} setPrompt={setPrompt} />
                     {loading ? <p>Loading...</p> : <ResultList results={results} />}
                 </div>
             </div>
