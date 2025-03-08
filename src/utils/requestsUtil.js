@@ -10,10 +10,10 @@ const sendPrompt = async (prompt) => {
         }
 
         const res = await axios.get(`${apiDomain}/generate`, {
-            params: { prompt } // Correct way to pass query parameters
+            params: { prompt }
         });
 
-        return res.data; // Use res.data instead of res.json()
+        return res.data;
     } catch (e) {
         console.error("Error fetching data:", e);
         return [];
