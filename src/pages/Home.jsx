@@ -19,16 +19,18 @@ export default function Home() {
         setApiError(null);
 
         if (!location || !location.lat || !location.lon) {
-            setApiError("We can't get access to your location")
+            setApiError("We can't access your location.");
+            setLoading(false);
+            return;
         }
 
         try {
             const res = await sendPrompt(prompt, location.lat, location.lon, setApiError);
             setResults(res);
-            setLoading(false);
         } catch (e) {
-            setApiError("Something went wrong, please try again later");
-            setResults([])
+            setApiError("Something went wrong, please try again later.");
+            setResults([]);
+        } finally {
             setLoading(false);
         }
     };
@@ -40,13 +42,12 @@ export default function Home() {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gray-100 p-4">
-            <div className="w-full max-w-2xl p-6 shadow-xl bg-white rounded-2xl">
-                <div className="flex flex-col items-center space-y-4">
-                    {apiError && <ErrorCard message={apiError} /> }
-                    <SearchBar clear={clear} handleSubmit={handleSubmit} prompt={prompt} setPrompt={setPrompt} />
-                    {loading ? <p>Loading...</p> : <ResultList results={results} />}
-                </div>
+        <div className="flex items-center justify-center h-screen bg-gray-900 p-4">
+            <div className="w-full max-w-2xl p-6 shadow-2xl bg-gray-800 text-white border border-gray-700">
+                <h1 className="text-xl font-bold text-blue-500">SnackScout</h1>
+                {apiError && <ErrorCard message={apiError} />}
+                <SearchBar clear={clear} handleSubmit={handleSubmit} prompt={prompt} setPrompt={setPrompt} />
+                {loading ? <p className="text-gray-300 text-center">Loading...</p> : <ResultList results={results} />}
             </div>
         </div>
     );
