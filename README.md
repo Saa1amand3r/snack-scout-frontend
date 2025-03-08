@@ -1,0 +1,1 @@
+# snack-scout-frontend
